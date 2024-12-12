@@ -136,6 +136,11 @@ class Graph:
         for node in self.registeredNodes:
             if len(node.connections) == 0:
                 res.append(node)
+        for node in self.registeredNodes:
+            for isolateNode in res:
+                if node.isConnectedTo(isolateNode):
+                    res.pop(isolateNode)
+        return res
         
     
     
@@ -153,6 +158,7 @@ class Graph:
         graph.connect(a, b)
         
         graph.connectByData("a", "e")
+        graph.connectByData("b", "a")
         graph.connect(a, f)
         graph.connect(b, c)
         graph.connect(b, e)
