@@ -8,8 +8,9 @@ class Graph:
     @staticmethod
     def connect(origin, target, weight=1, mutual=False, returnWeight=None):
         if isinstance(origin, NodeGraph) and isinstance(target, NodeGraph):
-            origin.connections.append({target:weight})
-            if mutual:
+            if not origin.isConnectedTo(target):
+                origin.connections.append({target:weight})
+            if mutual and not target.isConnectedTo(origin):
                 target.connections.append({origin:returnWeight if returnWeight else weight})
         else:
             print("Connecting nodes must be NodeGraph instances.")
@@ -17,6 +18,18 @@ class Graph:
     
     def __init__(self):
         self.registeredNodes = []
+        
+    def connectByData(self, dataOrigin, dataTarget, weight=1, mutual=False, returnWeight=None, force=False):
+        origin = self.getNodeByValue(dataOrigin)
+        target = self.getNodeByValue(dataTarget)
+        if not origin and force:
+            origin = self.registerNode(dataOrigin)
+        if not target and force:
+            target = self.registerNode(dataTarget)
+        if origin and target:
+            Graph.connect(origin, target, weight, mutual, returnWeight)
+        else:
+            print("'force' set to 'false' and insufficient nodes")
         
     def registerNode(self, data):
         newNode = NodeGraph(data)
@@ -118,6 +131,11 @@ class Graph:
                     queue.append(i)
                     visited[self.registeredNodes.index(i)] = True
         
+    def getIsolateNotes(self):
+        res = []
+        for node in self.registeredNodes:
+            if len(node.connections) == 0:
+                res.append(node)
         
     
     
@@ -133,7 +151,8 @@ class Graph:
         g = graph.registerNode("g")
         h = graph.registerNode("h")
         graph.connect(a, b)
-        graph.connect(a, e)
+        
+        graph.connectByData("a", "e")
         graph.connect(a, f)
         graph.connect(b, c)
         graph.connect(b, e)

@@ -34,3 +34,10 @@ class NodeGraph:
             currentTuple = list(connection.items())[0]
             temp.append({"node":currentTuple[0], "data":currentTuple[0].data})
         return temp
+    
+    def isConnectedTo(self, node):
+        res = False
+        for connection in self.connections:
+            if list(connection.keys())[0] == node:
+                res = True
+        return res

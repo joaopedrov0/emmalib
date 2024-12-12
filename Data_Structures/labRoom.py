@@ -126,7 +126,7 @@ def c():
     for node in res:
         print(node.data)
     
-c()
+# c()
 
 
 
@@ -165,7 +165,7 @@ def main():
         else:
             print("Opção inválida")
     
-# main()
+main()
 
 # Nayahath = Traveler()
 # Arcana = Graph()
